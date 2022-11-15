@@ -4,6 +4,7 @@ const multer = require("multer");
 // const cors = require("cors");
 const { createFFmpeg } = require("@ffmpeg/ffmpeg");
 // const PQueue = require("p-queue");
+const proxy = require("http-proxy-middleware");
 
 const ffmpegInstance = createFFmpeg({ log: true });
 let ffmpegLoadingPromise = ffmpegInstance.load();
@@ -29,6 +30,20 @@ const upload = multer({
 
 app.use(cors());
 app.use(express.static("public"));
+
+app.use(
+  "/orthanc", // change this
+  proxy.createProxyMiddleware({
+    pathRewrite: {
+      "^/orthanc/": "/", // change this
+    },
+
+    // backend server to proxy request
+    target: "http://localhost:8042",
+    secure: false,
+    changeOrigin: true,
+  })
+);
 
 app.get("/", (req, res) => {
   return res.json({ message: "helllooooooooooooooooo" });
