@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-// const cors = require("cors");
 const { createFFmpeg } = require("@ffmpeg/ffmpeg");
 // const PQueue = require("p-queue");
 const proxy = require("http-proxy-middleware");
@@ -32,14 +31,36 @@ app.use(cors());
 app.use(express.static("public"));
 
 app.use(
-  "/orthanc", // change this
+  "/echoapp/convert/",
   proxy.createProxyMiddleware({
-    pathRewrite: {
-      "^/orthanc/": "/", // change this
-    },
+    target: "http://10.100.0.39:8000",
+    secure: false,
+    changeOrigin: true,
+  })
+);
 
-    // backend server to proxy request
-    target: "http://localhost:8042",
+app.use(
+  "/echoapp/lv_segmentation",
+  proxy.createProxyMiddleware({
+    target: "http://10.100.0.39:8000",
+    secure: false,
+    changeOrigin: true,
+  })
+);
+
+app.use(
+  "/file",
+  proxy.createProxyMiddleware({
+    target: "http://10.100.0.25:8000",
+    secure: false,
+    changeOrigin: true,
+  })
+);
+
+app.use(
+  "/ECGAnn",
+  proxy.createProxyMiddleware({
+    target: "http://10.100.0.25:8000",
     secure: false,
     changeOrigin: true,
   })
@@ -68,7 +89,7 @@ app.post("/thumbnail", upload.single("video"), async (req, res) => {
       "-i",
       inputFileName,
       "-filter_complex",
-      "fps=5,scale=720:-1:flags=lanczos[x];[x]split[x1][x2];[x1]palettegen[p];[x2][p]paletteuse",
+      "fps=10,scale=720:-1:flags=lanczos[x];[x]split[x1][x2];[x1]palettegen[p];[x2][p]paletteuse",
       "-f",
       "mp4",
       outputFileName
