@@ -66,6 +66,15 @@ app.use(
   })
 );
 
+app.use(
+  "/ecgPrediction",
+  proxy.createProxyMiddleware({
+    target: "http://10.100.0.25:8060",
+    secure: false,
+    changeOrigin: true,
+  })
+);
+
 app.get("/", (req, res) => {
   return res.json({ message: "helllooooooooooooooooo" });
 });
@@ -85,7 +94,7 @@ app.post("/thumbnail", upload.single("video"), async (req, res) => {
     await ffmpeg.run(
       "-y",
       "-t",
-      "3",
+      "10",
       "-i",
       inputFileName,
       "-filter_complex",
