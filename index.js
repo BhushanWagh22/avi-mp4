@@ -33,7 +33,7 @@ app.use(express.static("public"));
 app.use(
   "/echoapp/convert/",
   proxy.createProxyMiddleware({
-    target: "http://10.100.0.39:8000",
+    target: "http://10.100.0.24:8000",
     secure: false,
     changeOrigin: true,
   })
@@ -42,7 +42,7 @@ app.use(
 app.use(
   "/echoapp/lv_segmentation",
   proxy.createProxyMiddleware({
-    target: "http://10.100.0.39:8000",
+    target: "http://10.100.0.24:8000",
     secure: false,
     changeOrigin: true,
   })
@@ -51,7 +51,7 @@ app.use(
 app.use(
   "/file",
   proxy.createProxyMiddleware({
-    target: "http://10.100.0.25:8000",
+    target: "http://10.100.0.23:8000",
     secure: false,
     changeOrigin: true,
   })
@@ -60,7 +60,7 @@ app.use(
 app.use(
   "/ECGAnn",
   proxy.createProxyMiddleware({
-    target: "http://10.100.0.25:8000",
+    target: "http://10.100.0.23:8000",
     secure: false,
     changeOrigin: true,
   })
@@ -69,7 +69,7 @@ app.use(
 app.use(
   "/ecgPrediction",
   proxy.createProxyMiddleware({
-    target: "http://10.100.0.25:8060",
+    target: "http://10.100.0.23:8060",
     secure: false,
     changeOrigin: true,
   })
